@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAIBounce : EnemyAI
+public class EnemyAIBounce : EnemyAI // INHERITANCE
 {
     [SerializeField] float bounceMultiplyer = 1;
     Rigidbody enemyRb;
@@ -16,21 +16,13 @@ public class EnemyAIBounce : EnemyAI
         target = GameObject.FindObjectOfType<PlayerController>();
         enemyRb = GetComponent<Rigidbody>();
     }
-    public override void Move()
+    public override void Move() // POLYMORPHISM
     {
-        //transform.LookAt(target.transform.position + new Vector3(0, transform.position.y, 0));
-        //enemyRb.AddForce(Vector3.forward * bounceMultiplyer * -1 * Time.deltaTime);
-        //ConstrainHeight();
-        //ConstrainMovementToGrid();
+        transform.LookAt(target.transform.position + new Vector3(0, transform.position.y, 0));
+        ConstrainMovementToGrid();
     }
 
-    private void ConstrainHeight()
-    {
-        if (enemyRb.position.y > 1.5f)
-        {
-            enemyRb.position = new Vector3(enemyRb.position.x, 1.5f, enemyRb.position.z);
-        }
-    }
+    
     private void ConstrainMovementToGrid()
     {
         if (transform.position.x > gridManager.GridSize.x - 1)
@@ -59,7 +51,5 @@ public class EnemyAIBounce : EnemyAI
             enemyRb.AddForce(Vector3.up * bounceMultiplyer + (target.transform.position - transform.position)*2 + new Vector3(0, transform.position.y, 0));
         }   
     }
-    private void OnCollisionExit(Collision other) {
-        Debug.Log(gameObject.name);
-    }
+    
 }

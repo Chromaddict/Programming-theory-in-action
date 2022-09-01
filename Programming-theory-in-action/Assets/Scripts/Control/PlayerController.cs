@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     
 
-    private void HandleInput()
+    private void HandleInput() // ABSTRACTION
     {
         float horizInput = Input.GetAxis("Horizontal");
         float vertInput = Input.GetAxis("Vertical");
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void ConstrainMovementToGrid()
+    private void ConstrainMovementToGrid() // ABSTRACTION
     {
         if (transform.position.x > gridManager.GridSize.x - 1)
         {
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleExplored()
+    private void HandleExplored() // ABSTRACTION
     {
         coords = gridManager.GetCoordinatesFromPosition(transform.position);
         if (!gridManager.GetNode(coords).isExplored)

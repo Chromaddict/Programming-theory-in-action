@@ -8,15 +8,15 @@ public class GridManager : MonoBehaviour
     [SerializeField] GameObject tilePrefab;
     [SerializeField] Material cleanMat;
     GameObject[,] tileArray;
-    public GameObject[,] TileArray { get {return tileArray; } }
-    public Vector2Int GridSize { get { return gridSize; } }
+    public GameObject[,] TileArray { get {return tileArray; } } // ENCAPSULATION
+    public Vector2Int GridSize { get { return gridSize; } } // ENCAPSULATION
     [SerializeField] int unityGridSize = 1;
-    public int UnityGridSize {get { return unityGridSize; } }
+    public int UnityGridSize {get { return unityGridSize; } } // ENCAPSULATION
     Dictionary<Vector2Int, Node> grid = new Dictionary<Vector2Int, Node>();
-    public Dictionary<Vector2Int, Node> Grid { get { return grid; } }
+    public Dictionary<Vector2Int, Node> Grid { get { return grid; } } // ENCAPSULATION
     int cleanTiles = 0;
     int dirtyTiles;
-    public int CleanTiles { get { return cleanTiles; } }
+    public int CleanTiles { get { return cleanTiles; } } // ENCAPSULATION
     void Awake() 
     {
         CreateGrid();  

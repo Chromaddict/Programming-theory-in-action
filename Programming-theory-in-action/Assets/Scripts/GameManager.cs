@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set;}
+    public static GameManager Instance { get; private set;} // ENCAPSULATION
     public int score;
     public float difficulty = 1f;
     public int highScore;
