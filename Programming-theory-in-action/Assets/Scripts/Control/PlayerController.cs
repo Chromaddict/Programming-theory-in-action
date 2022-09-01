@@ -5,44 +5,63 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] Rigidbody rightWheelRb;
-    [SerializeField] Rigidbody leftWheelRb;
-    [SerializeField] float maxAngularV;
-    [SerializeField] float accelSpeed;
+    [SerializeField] float speed = 5f;
+    [SerializeField] float rotateSpeed = 1f;
+    GridManager gridManager;
+    Vector2Int coords;
     
-    // Start is called before the first frame update
     void Start()
     {
-        SetupRb();
+        gridManager = GameObject.FindObjectOfType<GridManager>();
     }
 
-    private void SetupRb()
-    {
-        leftWheelRb.maxAngularVelocity = maxAngularV;
-        rightWheelRb.maxAngularVelocity = maxAngularV;
-    }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        HandleMovement();
+        HandleInput();
+        HandleExplored();
     }
 
-    private void HandleMovement()
+    
+
+    private void HandleInput()
     {
-        
         float horizInput = Input.GetAxis("Horizontal");
         float vertInput = Input.GetAxis("Vertical");
-        
-        leftWheelRb.AddTorque(Vector3.left * horizInput * Time.deltaTime * accelSpeed, ForceMode.Impulse);
-        rightWheelRb.AddTorque(Vector3.right * horizInput * Time.deltaTime * accelSpeed, ForceMode.Impulse);
-        leftWheelRb.AddTorque(Vector3.left * vertInput * Time.deltaTime * accelSpeed, ForceMode.Impulse);
-        
-        rightWheelRb.AddTorque(Vector3.left * vertInput * Time.deltaTime * accelSpeed, ForceMode.Impulse);
-        if (Mathf.Approximately(0, horizInput) && Mathf.Approximately(0, vertInput))
+
+        transform.Rotate(new Vector3(0, horizInput * rotateSpeed * Time.deltaTime, 0), Space.World);
+        transform.Translate(Vector3.forward * vertInput * Time.deltaTime * speed);
+        ConstrainMovementToGrid();
+
+    }
+
+    private void ConstrainMovementToGrid()
+    {
+        if (transform.position.x > gridManager.GridSize.x - 1)
         {
-            leftWheelRb.angularVelocity = Vector3.zero;
-            rightWheelRb.angularVelocity = Vector3.zero;
+            transform.localPosition = new Vector3(gridManager.GridSize.x - 1, transform.position.y, transform.position.z);
+        }
+        if (transform.position.z > gridManager.GridSize.y - 1)
+        {
+            transform.localPosition = new Vector3(transform.position.x, transform.position.y, gridManager.GridSize.y - 1);
+        }
+        if (transform.position.x < 0)
+        {
+            transform.localPosition = new Vector3(0, transform.position.y, transform.position.z);
+        }
+        if (transform.position.z < 0)
+        {
+            transform.localPosition = new Vector3(transform.position.x, transform.position.y, 0);
+        }
+    }
+
+    private void HandleExplored()
+    {
+        coords = gridManager.GetCoordinatesFromPosition(transform.position);
+        if (!gridManager.GetNode(coords).isExplored)
+        {
+            gridManager.GetNode(coords).isExplored = true;
+            gridManager.CleanTile(coords);
         }
     }
 }
